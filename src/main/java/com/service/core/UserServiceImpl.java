@@ -6,4 +6,14 @@ public class UserServiceImpl implements IUserService{
         System.out.println("Hello " + name);
         return "Hello " + name;
     }
+
+    @Override
+    public String login() {
+        return null;
+    }
+
+    @Override
+    public String follow() {
+        return null;
+    }
 }
