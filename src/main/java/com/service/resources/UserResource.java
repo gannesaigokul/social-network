@@ -25,10 +25,10 @@ public class UserResource {
     @Path("/register")
     public String registerUser(/*@Suspended final AsyncResponse asyncResponse,*/
                              @QueryParam("name") String name) {
-/*        CompletableFuture.runAsync(() -> service.check(configuration.getName() + name))
+/*        CompletableFuture.runAsync(() -> service.register(configuration.getName() + name))
                 .thenApply(asyncResponse::resume)
                 .exceptionally(e -> asyncResponse.resume(Response.status(500).entity(e).build()));*/
-        return userService.check(configuration.getName() + name);
+        return userService.register(configuration.getName() + name);
     }
 
     @GET

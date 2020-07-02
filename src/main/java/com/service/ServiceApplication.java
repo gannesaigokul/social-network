@@ -2,6 +2,7 @@ package com.service;
 
 import com.google.inject.Stage;
 import com.hubspot.dropwizard.guice.GuiceBundle;
+import com.service.resources.FeedResource;
 import com.service.resources.ServiceModule;
 import com.service.resources.UserResource;
 import io.dropwizard.Application;
@@ -18,6 +19,7 @@ public class ServiceApplication extends Application<ServiceConfiguration> {
 
     public void run(ServiceConfiguration serviceConfiguration, Environment environment) throws Exception {
         environment.jersey().register(UserResource.class);
+        environment.jersey().register(FeedResource.class);
     }
 
     @Override

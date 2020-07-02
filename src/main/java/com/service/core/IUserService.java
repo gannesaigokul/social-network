@@ -2,7 +2,7 @@ package com.service.core;
 
 public interface IUserService {
 
-    String check(String name);
+    String register(String name);
 
     String login();
 

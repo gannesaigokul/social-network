@@ -1,10 +1,25 @@
 package com.service.core;
 
+import com.google.inject.Inject;
+import com.service.ServiceConfiguration;
+import com.service.api.dao.UserDao;
+
 public class UserServiceImpl implements IUserService{
+
+/*
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+*/
+
+    @Inject
+    private UserDao userDao;
+
+    @Inject
+    private ServiceConfiguration configuration;
+
     @Override
-    public String check(String name) {
-        System.out.println("Hello " + name);
-        return "Hello " + name;
+    public String register(String name1) {
+
+        return "Hello " + name1;
     }
 
     @Override
