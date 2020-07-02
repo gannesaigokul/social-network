@@ -6,14 +6,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.glassfish.jersey.server.JSONP;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Setter
 @Getter
 @ToString
-public class RegisterRequest extends User{
-/*
+public class User {
+
+    @JsonProperty("userId")
+    private Integer userId;
+
     @JsonProperty("firstName")
     private String firstName;
 
@@ -30,6 +34,6 @@ public class RegisterRequest extends User{
     private Integer age;
 
     @JsonProperty("bio")
-    private String bio;*/
+    private String bio;
 
 }

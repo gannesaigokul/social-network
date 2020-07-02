@@ -2,17 +2,9 @@ package com.service.core;
 
 import com.google.inject.Inject;
 import com.service.ServiceConfiguration;
-import com.service.api.beans.ApiResponse;
-import com.service.api.beans.RegisterRequest;
-import com.service.api.beans.RegisterResponse;
-import com.service.api.constants.SqlConstants;
+import com.service.api.beans.*;
 import com.service.api.dao.UserDao;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.service.api.constants.CommonConstants.RESPONSE_SUCCESS_CODE;
-import static com.service.api.constants.CommonConstants.RESPONSE_SUCCESS_MSG;
 import static com.service.api.utils.CommonUtils.generateMeta;
 
 public class UserServiceImpl implements IUserService{
@@ -30,23 +22,24 @@ public class UserServiceImpl implements IUserService{
     @Override
     public ApiResponse register(RegisterRequest registerRequest) {
         boolean status = false;
-        if(validate(registerRequest)) {
+        if(requestValidator(registerRequest)) {
             status = userDao.registerUser(registerRequest);
         }
-        return generateMeta(new RegisterResponse(status), RESPONSE_SUCCESS_MSG, RESPONSE_SUCCESS_CODE);
+        return generateMeta(new PostResponse(status));
     }
 
-    private boolean validate(RegisterRequest registerRequest) {
+    //TODO: Func lambda
+    private boolean requestValidator(RegisterRequest registerRequest) {
         return true;
     }
 
     @Override
-    public String login() {
-        return null;
+    public ApiResponse login(String username, String password) {
+        return generateMeta(userDao.loginUser(username, password));
     }
 
     @Override
-    public String friend() {
+    public ApiResponse friend() {
         return null;
     }
 }

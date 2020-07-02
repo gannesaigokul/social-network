@@ -7,7 +7,7 @@ public interface IUserService {
 
     ApiResponse register(RegisterRequest registerRequest);
 
-    String login();
+    ApiResponse login(String username, String password);
 
-    String friend();
+    ApiResponse friend();
 }

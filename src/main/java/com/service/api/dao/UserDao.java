@@ -3,10 +3,11 @@ package com.service.api.dao;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.service.api.beans.RegisterRequest;
+import com.service.api.beans.User;
+import com.service.api.beans.UserResponse;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,33 +19,46 @@ public class UserDao {
     @Inject
     private DBI jdbi;
 
-    @Inject
-    private Connection connection;
-
     public boolean registerUser(RegisterRequest registerRequest) {
         int update;
         try (Handle handle = jdbi.open()) {
-/*            List<Map<String, Object>> select = handle.select("SELECT id, name, quantity FROM Inventory");
-            for (Map<String, Object> paramMap : select) {
-                String name1 = (String) paramMap.get("name");
-                name1 = name1.trim();
-                int quantity = (int)paramMap.get("quantity");
-                System.out.println(name1 + quantity);
-            }*/
-            update = handle.createStatement(USER_INSERT_QUERY).bindFromMap(mapData(registerRequest)).execute();
+            update = handle.createStatement(QUERY_USER_INSERT).bindFromMap(mapData(registerRequest)).execute();
         }
-/*        System.out.print("Reading data from table, press ENTER to continue...");
-        String sql = "SELECT id, name, quantity FROM Inventory";
-        try{
-            try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
-                while (resultSet.next()) {
-                    System.out.println(resultSet.getInt(1) + " " + resultSet.getString(2) + " " + resultSet.getString(3));
-                }
-            }
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
-        }*/
         return update == 1;
+    }
+
+    public UserResponse loginUser(String username, String password) {
+        UserResponse user;
+        try(Handle handle = jdbi.open()) {
+            Map<String, Object> select = handle.createQuery(QUERY_USER_LOGIN)
+                    .bind(USERNAME, username)
+                    .bind(PASSWORD, password)
+                    .first();
+            user = (UserResponse) mapUserData(select);
+        }
+        return user;
+    }
+
+    public User getUserDetails(String username) {
+        User user;
+        try(Handle handle = jdbi.open()) {
+            Map<String, Object> select = handle.createQuery(QUERY_USER_DETAILS)
+                    .bind(USERNAME, username)
+                    .first();
+            user = mapUserData(select);
+        }
+        return user;
+    }
+
+    private User mapUserData(Map<String, Object> select) {
+        User user = new User();
+        user.setUserId((Integer) select.get(USER_ID));
+        user.setUserName((String) select.get(USERNAME));
+        user.setLastName((String) select.get(LAST_NAME));
+        user.setFirstName((String) select.get(FIRST_NAME));
+        user.setAge((Integer) select.get(USER_AGE));
+        user.setBio((String) select.get(USER_BIO));
+        return user;
     }
 
     private Map<String, String> mapData(RegisterRequest registerRequest) {
@@ -55,7 +69,6 @@ public class UserDao {
         map.put(PASSWORD, registerRequest.getPassword());
         map.put(USER_AGE, String.valueOf(registerRequest.getAge()));
         map.put(USER_BIO, registerRequest.getBio());
-        //map.forEach((key, value) -> System.out.println(key + " " + value));
         return map;
     }
 

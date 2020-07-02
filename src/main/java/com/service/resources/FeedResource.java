@@ -1,11 +1,13 @@
 package com.service.resources;
 
+import com.google.inject.Inject;
 import com.service.ServiceConfiguration;
-import com.service.api.beans.ApiResponse;
 import com.service.api.beans.PostRequest;
 import com.service.core.IFeedService;
 
 import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 
 @Path("/service/feed")
@@ -14,32 +16,31 @@ import javax.ws.rs.core.MediaType;
 public class FeedResource {
 
     private final IFeedService feedService;
-    private final ServiceConfiguration configuration;
 
+    @Inject
     public FeedResource(IFeedService feedService, ServiceConfiguration configuration) {
         this.feedService = feedService;
-        this.configuration = configuration;
     }
 
     @POST
     @Path("/write")
-    public ApiResponse write(/*@Suspended final AsyncResponse asyncResponse,*/
-            @BeanParam PostRequest postRequest) {
-/*        CompletableFuture.runAsync(() -> service.register(configuration.getName() + name))
-                .thenApply(asyncResponse::resume)
-                .exceptionally(e -> asyncResponse.resume(Response.status(500).entity(e).build()));*/
-        return feedService.write(postRequest);
+    public void write(@Suspended final AsyncResponse asyncResponse,
+                      PostRequest postRequest) {
+        asyncResponse.resume(feedService.write(postRequest));
     }
 
     @GET
-    public String getFeed(@QueryParam("username") String username) {
-        return feedService.getFeed();
+    public void getFeed(@Suspended final AsyncResponse asyncResponse,
+                          @QueryParam("username") String username) {
+        asyncResponse.resume(feedService.getFeed(username));
     }
 
     @GET
     @Path("/profile")
-    public String profile() {
-        return feedService.profile();
+    public void profile(@Suspended final AsyncResponse asyncResponse,
+                          @QueryParam("username") String username) {
+        asyncResponse.resume(feedService.profile(username));
+
     }
 
 }

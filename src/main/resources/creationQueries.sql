@@ -11,12 +11,12 @@ CREATE TABLE Users (
 CREATE TABLE Posts (
   PostId int IDENTITY(1,1) PRIMARY KEY,
   Post VARCHAR(1000) NOT NULL,
-  UserId int FOREIGN KEY REFERENCES Users(UserId),
+  UserName varchar(20) FOREIGN KEY REFERENCES Users(UserName),
   CreationTime DATETIME NOT NULL
 );
 
 CREATE TABLE Friends (
-  UserId int FOREIGN KEY REFERENCES Users(UserId),
-  FollowersId int FOREIGN KEY REFERENCES Users(UserId),
-  PRIMARY KEY(UserId, FollowersId)
+  UserName varchar(20) FOREIGN KEY REFERENCES Users(UserName),
+  FollowerName varchar(20) FOREIGN KEY REFERENCES Users(UserName),
+  PRIMARY KEY(UserName, FollowerName)
 );
