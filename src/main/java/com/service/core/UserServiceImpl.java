@@ -2,7 +2,18 @@ package com.service.core;
 
 import com.google.inject.Inject;
 import com.service.ServiceConfiguration;
+import com.service.api.beans.ApiResponse;
+import com.service.api.beans.RegisterRequest;
+import com.service.api.beans.RegisterResponse;
+import com.service.api.constants.SqlConstants;
 import com.service.api.dao.UserDao;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.service.api.constants.CommonConstants.RESPONSE_SUCCESS_CODE;
+import static com.service.api.constants.CommonConstants.RESPONSE_SUCCESS_MSG;
+import static com.service.api.utils.CommonUtils.generateMeta;
 
 public class UserServiceImpl implements IUserService{
 
@@ -17,9 +28,16 @@ public class UserServiceImpl implements IUserService{
     private ServiceConfiguration configuration;
 
     @Override
-    public String register(String name1) {
+    public ApiResponse register(RegisterRequest registerRequest) {
+        boolean status = false;
+        if(validate(registerRequest)) {
+            status = userDao.registerUser(registerRequest);
+        }
+        return generateMeta(new RegisterResponse(status), RESPONSE_SUCCESS_MSG, RESPONSE_SUCCESS_CODE);
+    }
 
-        return "Hello " + name1;
+    private boolean validate(RegisterRequest registerRequest) {
+        return true;
     }
 
     @Override
@@ -28,7 +46,7 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public String follow() {
+    public String friend() {
         return null;
     }
 }

@@ -1,9 +1,9 @@
 package com.service.resources;
 
-import com.google.inject.Inject;
 import com.service.ServiceConfiguration;
+import com.service.api.beans.ApiResponse;
+import com.service.api.beans.PostRequest;
 import com.service.core.IFeedService;
-import jdk.nashorn.internal.objects.annotations.Getter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -23,16 +23,16 @@ public class FeedResource {
 
     @POST
     @Path("/write")
-    public String write(/*@Suspended final AsyncResponse asyncResponse,*/
-            @QueryParam("name") String name) {
+    public ApiResponse write(/*@Suspended final AsyncResponse asyncResponse,*/
+            @BeanParam PostRequest postRequest) {
 /*        CompletableFuture.runAsync(() -> service.register(configuration.getName() + name))
                 .thenApply(asyncResponse::resume)
                 .exceptionally(e -> asyncResponse.resume(Response.status(500).entity(e).build()));*/
-        return feedService.write(configuration.getName() + name);
+        return feedService.write(postRequest);
     }
 
     @GET
-    public String getFeed() {
+    public String getFeed(@QueryParam("username") String username) {
         return feedService.getFeed();
     }
 

@@ -1,5 +1,8 @@
 package com.service.core;
 
+import com.service.api.beans.ApiResponse;
+import com.service.api.beans.PostRequest;
+
 public class FeedServiceImpl implements IFeedService{
 
     @Override
@@ -13,7 +16,7 @@ public class FeedServiceImpl implements IFeedService{
     }
 
     @Override
-    public String write(String s) {
+    public ApiResponse write(PostRequest postRequest) {
         return null;
     }
 

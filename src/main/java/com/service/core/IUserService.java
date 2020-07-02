@@ -1,10 +1,13 @@
 package com.service.core;
 
+import com.service.api.beans.ApiResponse;
+import com.service.api.beans.RegisterRequest;
+
 public interface IUserService {
 
-    String register(String name);
+    ApiResponse register(RegisterRequest registerRequest);
 
     String login();
 
-    String follow();
+    String friend();
 }

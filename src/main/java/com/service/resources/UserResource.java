@@ -2,10 +2,17 @@ package com.service.resources;
 
 import com.google.inject.Inject;
 import com.service.ServiceConfiguration;
+import com.service.api.beans.ApiResponse;
+import com.service.api.beans.RegisterRequest;
 import com.service.core.IUserService;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.concurrent.CompletableFuture;
 
 @Path("/service/user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,12 +30,14 @@ public class UserResource {
 
     @POST
     @Path("/register")
-    public String registerUser(/*@Suspended final AsyncResponse asyncResponse,*/
-                             @QueryParam("name") String name) {
-/*        CompletableFuture.runAsync(() -> service.register(configuration.getName() + name))
-                .thenApply(asyncResponse::resume)
+    public void registerUser(@Suspended final AsyncResponse asyncResponse,
+            RegisterRequest registerRequest) {
+        //System.out.println(registerRequest.toString());
+/*        CompletableFuture.runAsync(() -> userService.register(registerRequest))
+                .thenApply(res -> asyncResponse.resume(res))
                 .exceptionally(e -> asyncResponse.resume(Response.status(500).entity(e).build()));*/
-        return userService.register(configuration.getName() + name);
+        asyncResponse.resume(userService.register(registerRequest));
+        //return userService.register(registerRequest);
     }
 
     @GET
@@ -38,9 +47,9 @@ public class UserResource {
     }
 
     @PUT
-    @Path("/follow")
-    public String followRequest() {
-        return userService.follow();
+    @Path("/friend")
+    public String friendRequest() {
+        return userService.friend();
     }
 
 }
