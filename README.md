@@ -9,11 +9,6 @@
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
 * [APIs](#usage)
-* [Roadmap](#roadmap)
-* [Contributing](#contributing)
-* [License](#license)
-* [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
 
 <!-- About the Project -->
 ## About the Project
