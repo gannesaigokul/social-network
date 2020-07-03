@@ -39,8 +39,10 @@ public class UserResource {
 
     @PUT
     @Path("/friend")
-    public void friendRequest(@Suspended final AsyncResponse asyncResponse) {
-        asyncResponse.resume(userService.friend());
+    public void friendRequest(@Suspended final AsyncResponse asyncResponse,
+                              @QueryParam("username") String username,
+                              @QueryParam("followerUsername") String followerUsername) {
+        asyncResponse.resume(userService.friend(username, followerUsername));
     }
 
 }

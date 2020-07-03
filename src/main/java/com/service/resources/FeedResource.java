@@ -31,8 +31,9 @@ public class FeedResource {
 
     @GET
     public void getFeed(@Suspended final AsyncResponse asyncResponse,
-                          @QueryParam("username") String username) {
-        asyncResponse.resume(feedService.getFeed(username));
+                        @QueryParam("username") String username,
+                        @QueryParam("page") int page) {
+        asyncResponse.resume(feedService.getFeed(username, page));
     }
 
     @GET

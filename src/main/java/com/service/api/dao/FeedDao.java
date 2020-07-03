@@ -4,15 +4,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.service.api.beans.DataFeed;
 import com.service.api.beans.PostRequest;
-import com.service.api.beans.RegisterRequest;
-import com.service.api.beans.User;
-import org.joda.time.DateTime;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,11 +34,24 @@ public class FeedDao {
         return update == 1;
     }
 
-    public List<DataFeed> getFeed(String username) {
+    public List<DataFeed> getUserFeed(String username) {
         List<DataFeed> dataFeeds;
         try(Handle handle = jdbi.open()) {
             List<Map<String, Object>> response = handle.createQuery(QUERY_USER_FEED)
                     .bind(USERNAME, username)
+                    .list();
+            dataFeeds = response.stream().map(this::mapDataFeed).collect(toList());
+        }
+        return dataFeeds;
+    }
+
+    public List<DataFeed> getFeed(String username, int offset, int noOfRecords) {
+        List<DataFeed> dataFeeds;
+        try(Handle handle = jdbi.open()) {
+            List<Map<String, Object>> response = handle.createQuery(QUERY_FEED)
+                    .bind(USERNAME, username)
+                    .bind(OFFSET, offset)
+                    .bind(NO_OF_RECORDS, noOfRecords)
                     .list();
             dataFeeds = response.stream().map(this::mapDataFeed).collect(toList());
         }

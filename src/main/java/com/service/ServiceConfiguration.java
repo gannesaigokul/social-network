@@ -10,8 +10,8 @@ import lombok.Setter;
 @Setter
 public class ServiceConfiguration extends Configuration {
 
-    @JsonProperty("name")
-    private String name;
+    @JsonProperty("recordSize")
+    private int recordSize;
 
     private DataSourceFactory database;
 

@@ -23,7 +23,7 @@ public class UserServiceImpl implements IUserService{
     public ApiResponse register(RegisterRequest registerRequest) {
         boolean status = false;
         if(requestValidator(registerRequest)) {
-            status = userDao.registerUser(registerRequest);
+            status = userDao.insertUser(registerRequest);
         }
         return generateMeta(new PostResponse(status));
     }
@@ -35,11 +35,11 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public ApiResponse login(String username, String password) {
-        return generateMeta(userDao.loginUser(username, password));
+        return generateMeta(userDao.validateUser(username, password));
     }
 
     @Override
-    public ApiResponse friend() {
-        return null;
+    public ApiResponse friend(String username, String followerUsername) {
+        return generateMeta(new PostResponse(userDao.insertFriend(username, followerUsername)));
     }
 }

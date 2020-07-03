@@ -19,15 +19,20 @@ public class UserDao {
     @Inject
     private DBI jdbi;
 
-    public boolean registerUser(RegisterRequest registerRequest) {
+    public boolean insertUser(RegisterRequest registerRequest) {
         int update;
         try (Handle handle = jdbi.open()) {
             update = handle.createStatement(QUERY_USER_INSERT).bindFromMap(mapData(registerRequest)).execute();
+            if(update == 1)
+                update = handle.createStatement(QUERY_FRIEND_INSERT)
+                        .bind(USERNAME, registerRequest.getUserName())
+                        .bind(FOLLOWER_NAME, registerRequest.getUserName())
+                        .execute();
         }
         return update == 1;
     }
 
-    public UserResponse loginUser(String username, String password) {
+    public UserResponse validateUser(String username, String password) {
         UserResponse user;
         try(Handle handle = jdbi.open()) {
             Map<String, Object> select = handle.createQuery(QUERY_USER_LOGIN)
@@ -48,6 +53,17 @@ public class UserDao {
             user = mapUserData(select);
         }
         return user;
+    }
+
+    public boolean insertFriend(String username, String followerUsername) {
+        int update;
+        try (Handle handle = jdbi.open()) {
+            update = handle.createStatement(QUERY_FRIEND_INSERT)
+                    .bind(USERNAME, username)
+                    .bind(FOLLOWER_NAME, followerUsername)
+                    .execute();
+        }
+        return update == 1;
     }
 
     private User mapUserData(Map<String, Object> select) {

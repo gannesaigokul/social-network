@@ -9,5 +9,5 @@ public interface IUserService {
 
     ApiResponse login(String username, String password);
 
-    ApiResponse friend();
+    ApiResponse friend(String username, String followerUsername);
 }

@@ -6,6 +6,9 @@ public final class SqlConstants {
     public static final String QUERY_USER_INSERT = "INSERT INTO Users " +
             "(LastName,FirstName,UserName,Password,Age,Bio) " +
             "VALUES (:lastName, :firstName, :userName, :password, :age, :bio)";
+    public static final String QUERY_FRIEND_INSERT = "INSERT INTO Friends " +
+            "(UserName,FollowerName) " +
+            "VALUES (:userName, :followerName)";
     public static final String QUERY_POST_INSERT = "INSERT INTO Posts " +
             "(Post,UserName,CreationTime) " +
             "VALUES (:post, :userName, :creationTime)";
@@ -15,6 +18,9 @@ public final class SqlConstants {
             "WHERE UserName = :userName";
     public static final String QUERY_USER_FEED = "SELECT postId, post, userName, creationTime FROM Posts " +
             "WHERE UserName = :userName";
+    public static final String QUERY_FEED = "SELECT postId, post, userName, creationTime FROM Posts " +
+            "WHERE UserName IN (SELECT followerName FROM Friends WHERE UserName = :userName) " +
+            "ORDER by creationTime DESC OFFSET :offset ROWS FETCH NEXT :recordSize ROWS ONLY";
 
     //Variables
     public static final String USER_ID = "userId";
@@ -27,5 +33,8 @@ public final class SqlConstants {
     public static final String POST_ID = "postId";
     public static final String POST = "post";
     public static final String CREATION_TIME = "creationTime";
+    public static final String FOLLOWER_NAME = "followerName";
+    public static final String OFFSET = "offset";
+    public static final String NO_OF_RECORDS = "recordSize";
 
 }
