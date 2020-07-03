@@ -13,13 +13,12 @@ import io.dropwizard.setup.Environment;
 
 public class ServiceApplication extends Application<ServiceConfiguration> {
 
-/*
-    private GuiceBundle<YAMLConfiguration> guiceBundle;
-*/
-
-    public void run(ServiceConfiguration serviceConfiguration, Environment environment) throws Exception {
+    @Override
+    public void run(ServiceConfiguration serviceConfiguration, Environment environment) {
         environment.jersey().register(UserResource.class);
         environment.jersey().register(FeedResource.class);
+/*        environment.jersey().getResourceConfig().register(EntryExitFilter.class);
+        environment.jersey().getResourceConfig().register(ResponseMetaFilter.class);*/
     }
 
     @Override

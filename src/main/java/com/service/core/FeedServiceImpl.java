@@ -9,8 +9,6 @@ import com.service.api.dao.UserDao;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.service.api.utils.CommonUtils.generateMeta;
-
 public class FeedServiceImpl implements IFeedService{
 
     @Inject
@@ -21,27 +19,30 @@ public class FeedServiceImpl implements IFeedService{
     private ServiceConfiguration serviceConfiguration;
 
     @Override
-    public ApiResponse profile(String username) {
+    public ProfileResponse profile(String username) {
         User user = userDao.getUserDetails(username);
         List<DataFeed> feedList = feedDao.getUserFeed(username);
         feedList.sort(Comparator.comparing(DataFeed::getCreationTime).reversed());
-        return generateMeta(new ProfileResponse(user, feedList));
+        /*return generateMeta(new ProfileResponse(user, feedList));*/
+        return new ProfileResponse(user, feedList);
     }
 
     @Override
-    public ApiResponse getFeed(String username, int page) {
+    public ProfileResponse getFeed(String username, int page) {
         int offset = page * serviceConfiguration.getRecordSize();
         List<DataFeed> dataFeeds = feedDao.getFeed(username, offset, serviceConfiguration.getRecordSize());
-        return generateMeta(new ProfileResponse(null, dataFeeds));
+        /*return generateMeta(new ProfileResponse(null, dataFeeds));*/
+        return new ProfileResponse(null, dataFeeds);
     }
 
     @Override
-    public ApiResponse write(PostRequest postRequest) {
+    public PostResponse write(PostRequest postRequest) {
         boolean status = false;
         if(requestValidator(postRequest)) {
             status = feedDao.writePost(postRequest);
         }
-        return generateMeta(new PostResponse(status));
+        /*return generateMeta(new PostResponse(status));*/
+        return new PostResponse(status);
     }
 
     private boolean requestValidator(PostRequest postRequest) {

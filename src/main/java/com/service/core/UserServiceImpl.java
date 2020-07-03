@@ -2,10 +2,10 @@ package com.service.core;
 
 import com.google.inject.Inject;
 import com.service.ServiceConfiguration;
-import com.service.api.beans.*;
+import com.service.api.beans.PostResponse;
+import com.service.api.beans.RegisterRequest;
+import com.service.api.beans.UserResponse;
 import com.service.api.dao.UserDao;
-
-import static com.service.api.utils.CommonUtils.generateMeta;
 
 public class UserServiceImpl implements IUserService{
 
@@ -20,12 +20,13 @@ public class UserServiceImpl implements IUserService{
     private ServiceConfiguration configuration;
 
     @Override
-    public ApiResponse register(RegisterRequest registerRequest) {
+    public PostResponse register(RegisterRequest registerRequest) {
         boolean status = false;
         if(requestValidator(registerRequest)) {
             status = userDao.insertUser(registerRequest);
         }
-        return generateMeta(new PostResponse(status));
+        /*return generateMeta(new PostResponse(status));*/
+        return new PostResponse(status);
     }
 
     //TODO: Func lambda
@@ -34,12 +35,14 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public ApiResponse login(String username, String password) {
-        return generateMeta(userDao.validateUser(username, password));
+    public UserResponse login(String username, String password) {
+        /*return generateMeta(userDao.validateUser(username, password));*/
+        return userDao.validateUser(username, password);
     }
 
     @Override
-    public ApiResponse friend(String username, String followerUsername) {
-        return generateMeta(new PostResponse(userDao.insertFriend(username, followerUsername)));
+    public PostResponse friend(String username, String followerUsername) {
+        /*return generateMeta(new PostResponse(userDao.insertFriend(username, followerUsername)));*/
+        return new PostResponse(userDao.insertFriend(username, followerUsername));
     }
 }
